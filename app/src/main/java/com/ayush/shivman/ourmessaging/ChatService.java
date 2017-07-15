@@ -65,6 +65,7 @@ public class ChatService extends Service {
                         Log.d("MAP", "\n\n"+mp.toString()+"\n\n");
                         db_message.child(ds1.getKey()).child(ds2.getKey()).removeValue();
                         db.createEntry(mp);
+                        Log.d("asa","ass");
 
                         /*new AsyncTask<Map<String,String>,Void,Boolean>()
                         {
