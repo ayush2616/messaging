@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "168068492811",
+    "firebase_url": "https://messaging-a0c84.firebaseio.com",
+    "project_id": "messaging-a0c84",
+    "storage_bucket": "messaging-a0c84.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168068492811:android:533adcc0b21d733f",
+        "android_client_info": {
+          "package_name": "com.ayush.shivman.ourmessaging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "168068492811-ukatd43m5vsujafucl2oj3piuom0qqq6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8230_RTy4bvoCXu-SYD5cj3PvUaF1QeM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
