@@ -16,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
+//massa bc
 public class MainActivity extends AppCompatActivity {
     private static final String UNAME="USER";
     private static final String SENDER="SENDER";
