@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        int unread=0;
         super.onResume();
         if(!isMyServiceRunning(ChatService.class))
         {
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             String message=c.getString(c.getColumnIndex(MESSAGE));
             String time=c.getString(c.getColumnIndex(TIME));
             Log.d("Cursor", "--"+name+","+sender+","+message+","+time);
-            map.put(name,new Pair<String, Integer>(message,))
+            map.put(name,new Pair<String, Integer>(message,unread));
             /*BriefMessageModel briefTemp=new BriefMessageModel();
             briefTemp.setBriefMessage(message);
             briefTemp.setUserName(name);
