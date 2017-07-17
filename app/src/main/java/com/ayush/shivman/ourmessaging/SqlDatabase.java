@@ -47,6 +47,8 @@ public class SqlDatabase {
     private static final String TIME="TIME";
     private static final String UNREAD="UNREAD";
     private static final String UID="UID";
+    private static final String MESSAGEID="MESSAGEID";
+
 
     private static final String TABLE = "CHATDB";
     private static final String USERS_TABLE = "USERS";
@@ -74,6 +76,7 @@ public class SqlDatabase {
                     SENDER + " VARCHAR(5), " +
                     MESSAGE + " VARCHAR(200), " +
                     UNREAD + " NUMBER, " +
+                    MESSAGEID + " NUMBER AUTOINCREMENT, " +
                     TIME + " NUMBER);");
             db.execSQL("CREATE TABLE IF NOT EXISTS " + USERS_TABLE + " (" +
                     //Column name     Type of variable
@@ -113,6 +116,9 @@ public class SqlDatabase {
         cv.put(SENDER,map.get("sender"));
         cv.put(MESSAGE,map.get("message"));
         cv.put(TIME,map.get("time"));
+        cv.put(UNREAD,map.get("unread"));
+
+        //do somthing
         mDatabase.insert(TABLE, null, cv);
 
     }

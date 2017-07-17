@@ -4,9 +4,11 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.annotation.IntegerRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -16,6 +18,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
     private static final String UNAME="USER";
     private static final String SENDER="SENDER";
@@ -24,12 +28,14 @@ public class MainActivity extends AppCompatActivity {
     ListView listViewBrief;
     ArrayList< BriefMessageModel> briefArr;
     BriefMeassageAdapter myAdapter;
+    HashMap<String,Pair<String,Integer> > map;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listViewBrief=(ListView)findViewById(R.id.list_view_brief);
         briefArr=new ArrayList<>();
+        map=new HashMap<>();
     }
 
     @Override
@@ -51,12 +57,13 @@ public class MainActivity extends AppCompatActivity {
             String message=c.getString(c.getColumnIndex(MESSAGE));
             String time=c.getString(c.getColumnIndex(TIME));
             Log.d("Cursor", "--"+name+","+sender+","+message+","+time);
-            BriefMessageModel briefTemp=new BriefMessageModel();
+            map.put(name,new Pair<String, Integer>(message,))
+            /*BriefMessageModel briefTemp=new BriefMessageModel();
             briefTemp.setBriefMessage(message);
             briefTemp.setUserName(name);
             briefTemp.setImage(R.drawable.send);
             briefTemp.setunread(0);
-            briefArr.add(briefTemp);
+            briefArr.add(briefTemp);*/
             c.moveToNext();
         }
         db.closeTable();
