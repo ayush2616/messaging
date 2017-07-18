@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.BoolRes;
@@ -29,7 +30,7 @@ import java.util.Map;
 public class ChatService extends Service {
 
     FirebaseDatabase db = FirebaseDatabase.getInstance();
-    DatabaseReference db_message=db.getReference().child("messages").child("ayush");
+    DatabaseReference db_message=db.getReference().child("messages");
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -40,7 +41,11 @@ public class ChatService extends Service {
     public void onCreate() {
         Log.d("Asasas", "onCreate: ");
         super.onCreate();
-
+        SharedPreferences pref = getSharedPreferences("GoogleSecure", Context.MODE_PRIVATE);
+        String number=pref.getString("number",null);
+        if(number==null)
+            return;
+        db_message=db_message.child(number);
         db_message.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

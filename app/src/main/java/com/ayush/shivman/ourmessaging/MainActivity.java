@@ -8,8 +8,15 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.nfc.Tag;
 import android.support.annotation.IntegerRes;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Menu;
@@ -27,37 +34,26 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String UNAME="USER";
-    private static final String SENDER="SENDER";
-    private static final String MESSAGE="MESSAGE";
-    private static final String TIME="TIME";
-    String TAG="MAINACTIVITY--";
-    ListView listViewBrief;
-    ArrayList< BriefMessageModel> briefArr;
-    BriefMeassageAdapter myAdapter;
-    HashMap<String,String > map;
-    HashMap<String,Integer > unreadMap;
+
+
+
+    private Toolbar toolbar;
+    FloatingActionButton btn;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
     FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        listViewBrief=(ListView)findViewById(R.id.list_view_brief);
-        briefArr=new ArrayList<>();
-        map=new HashMap<>();
-        unreadMap=new HashMap<>();
-        mAuth=FirebaseAuth.getInstance();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         SharedPreferences pref = getSharedPreferences("GoogleSecure", Context.MODE_PRIVATE);
         String number=pref.getString("number",null);
+         mAuth=FirebaseAuth.getInstance();
         if(mAuth.getCurrentUser()==null)
         {
             Intent i=new Intent(this,FirstStart.class);
@@ -65,67 +61,56 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
-        int unread=0;
-        super.onResume();
+
         if(!isMyServiceRunning(ChatService.class))
         {
-            startService(new Intent(this,ChatService.class));
+            startService(new Intent(getApplicationContext(),ChatService.class));
         }
-        SqlDatabase db=new SqlDatabase(this);
-        db.open();
-        Cursor c=db.getCursor(null);
-        c.moveToFirst();
-        briefArr.clear();
-        map.clear();
-        unreadMap.clear();
-        while(!c.isAfterLast())
-        {
-            String name=c.getString(c.getColumnIndex(UNAME));
-            String sender=c.getString(c.getColumnIndex(SENDER));
-            String message=c.getString(c.getColumnIndex(MESSAGE));
-            String time=c.getString(c.getColumnIndex(TIME));
-            int unreadT=c.getInt(c.getColumnIndex(SqlDatabase.UNREAD));
-            Log.d("Cursor--aa-", "--"+name+","+sender+","+message+","+time);
-            map.put(name,message);
-            int temp=0;
-            if(unreadT==1)
-            {
-                if(unreadMap.containsKey(name))
-                    temp=unreadMap.get(name);
-                temp++;
-            }
-            unreadMap.put(name,temp);
-            /*BriefMessageModel briefTemp=new BriefMessageModel();
-            briefTemp.setBriefMessage(message);
-            briefTemp.setUserName(name);
-            briefTemp.setImage(R.drawable.send);
-            briefTemp.setunread(0);
-            briefArr.add(briefTemp);*/
-            c.moveToNext();
-        }
-        db.closeTable();
-        for(Map.Entry<String,String > values : map.entrySet())
-        {
-            String name=values.getKey();
-            BriefMessageModel briefTemp=new BriefMessageModel();
-            briefTemp.setBriefMessage(map.get(name));
-            briefTemp.setUserName(name);
-            briefTemp.setImage(R.drawable.send);
-            briefTemp.setunread(unreadMap.get(name));
-            briefArr.add(briefTemp);
-        }
-        myAdapter=new BriefMeassageAdapter(briefArr,this);
-        listViewBrief.setAdapter(myAdapter);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+    }
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new ChatFragement(), "Chats");
+        viewPager.setAdapter(adapter);
     }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
         }
-        return false;
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -144,9 +129,19 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.SignOut) {
             mAuth.signOut();
-            listViewBrief.setVisibility(View.GONE);
+            startActivity(new Intent(this,FirstStart.class));
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
