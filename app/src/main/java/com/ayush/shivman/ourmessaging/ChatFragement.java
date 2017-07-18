@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,7 +49,16 @@ public class ChatFragement extends Fragment {
         map=new HashMap<>();
         unreadMap=new HashMap<>();
         mAuth= FirebaseAuth.getInstance();
-
+        listViewBrief.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                BriefMessageModel obj=briefArr.get(position);
+                String name=obj.getUserName();
+                Intent i=new Intent(getActivity(),ChatLayout.class);
+                i.putExtra("number",name);
+                getActivity().startActivity(i);
+            }
+        });
         return view;
 
     }

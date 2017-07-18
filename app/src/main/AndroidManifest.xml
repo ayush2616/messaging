@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ayush.shivman.ourmessaging">
 
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,6 +20,10 @@
         </activity>
         <service android:name=".ChatService"/>
         <activity android:name=".FirstStart"/>
+        <activity android:name=".ChatLayout"
+            android:theme="@style/MyMaterialTheme">
+
+        </activity>
     </application>
 
 </manifest>

@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +41,8 @@ public class FirstStart extends Activity {
     PhoneAuthProvider.ForceResendingToken mResendToken;
     EditText edNumber,edCode;
     Button btnSendNumber,btnSendCode,btnResend;
+    FirebaseDatabase db=FirebaseDatabase.getInstance();
+    DatabaseReference users=db.getReference().child("users");
      final String TAG="firstart";
     PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
     @Override
@@ -139,6 +143,7 @@ public class FirstStart extends Activity {
                             SharedPreferences.Editor editor=getSharedPreferences("com.ayush.shivman.ourmessaging.SECRET", Context.MODE_PRIVATE).edit();
                             editor.putString("number",number);
                             editor.apply();
+                            users.child(number).setValue("1");
                             finish();
                             startActivity(new Intent(getApplicationContext(),MainActivity.class));
                             // ...

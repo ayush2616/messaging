@@ -41,7 +41,7 @@ public class ChatService extends Service {
     public void onCreate() {
         Log.d("Asasas", "onCreate: ");
         super.onCreate();
-        SharedPreferences pref = getSharedPreferences("GoogleSecure", Context.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("com.ayush.shivman.ourmessaging.SECRET", Context.MODE_PRIVATE);
         String number=pref.getString("number",null);
         if(number==null)
             return;
@@ -65,7 +65,7 @@ public class ChatService extends Service {
                         Map<String,String> mp=new HashMap<String, String>();
                         mp.put("message",message);
                         mp.put("time",time);
-                        mp.put("sender",sender);
+                        mp.put("sender","1");
                         mp.put("name",name);
                         Log.d("MAP", "\n\n"+mp.toString()+"\n\n");
                         db_message.child(ds1.getKey()).child(ds2.getKey()).removeValue();
