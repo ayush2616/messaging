@@ -4,6 +4,8 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.SQLException;
+import android.nfc.Tag;
 import android.support.annotation.IntegerRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,16 +21,19 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static final String UNAME="USER";
     private static final String SENDER="SENDER";
     private static final String MESSAGE="MESSAGE";
     private static final String TIME="TIME";
+    String TAG="MAINACTIVITY--";
     ListView listViewBrief;
     ArrayList< BriefMessageModel> briefArr;
     BriefMeassageAdapter myAdapter;
-    HashMap<String,Pair<String,Integer> > map;
+    HashMap<String,String > map;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,8 +62,10 @@ public class MainActivity extends AppCompatActivity {
             String sender=c.getString(c.getColumnIndex(SENDER));
             String message=c.getString(c.getColumnIndex(MESSAGE));
             String time=c.getString(c.getColumnIndex(TIME));
+           // int unreadT=c.getInt(c.getColumnIndex(SqlDatabase.UNREAD));
             Log.d("Cursor", "--"+name+","+sender+","+message+","+time);
-            map.put(name,new Pair<String, Integer>(message,unread));
+            Log.d(TAG, "onResume: "+"ssss");
+            map.put(name,message);
             /*BriefMessageModel briefTemp=new BriefMessageModel();
             briefTemp.setBriefMessage(message);
             briefTemp.setUserName(name);
@@ -67,9 +74,14 @@ public class MainActivity extends AppCompatActivity {
             briefArr.add(briefTemp);*/
             c.moveToNext();
         }
+        Log.d(TAG, "onResume: "+map);
         db.closeTable();
-        myAdapter=new BriefMeassageAdapter(briefArr,this);
-        listViewBrief.setAdapter(myAdapter);
+        for(Map.Entry<String,String > values : map.entrySet())
+        {
+            Log.d(TAG, ""+values.getKey()+"  "+values.getValue());
+        }
+//        myAdapter=new BriefMeassageAdapter(briefArr,this);
+//        listViewBrief.setAdapter(myAdapter);
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {

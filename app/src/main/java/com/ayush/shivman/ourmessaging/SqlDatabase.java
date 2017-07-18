@@ -40,14 +40,14 @@ public class Database{
 }*/
 public class SqlDatabase {
 
-    private static final String DATABASE_NAME = "MESSAGE";
-    private static final String UNAME="USER";
-    private static final String SENDER="SENDER";
-    private static final String MESSAGE="MESSAGE";
-    private static final String TIME="TIME";
-    private static final String UNREAD="UNREAD";
-    private static final String UID="UID";
-    private static final String MESSAGEID="MESSAGEID";
+     static final String DATABASE_NAME = "MESSAGE";
+     static final String UNAME="USER";
+     static final String SENDER="SENDER";
+     static final String MESSAGE="MESSAGE";
+     static final String TIME="TIME";
+     static final String UNREAD="UNREAD";
+     static final String UID="UID";
+     static final String MESSAGEID="MESSAGEID";
 
 
     private static final String TABLE = "CHATDB";
