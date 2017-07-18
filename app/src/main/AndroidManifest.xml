@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <service android:name=".ChatService"/>
+        <activity android:name=".FirstStart"/>
     </application>
 
 </manifest>

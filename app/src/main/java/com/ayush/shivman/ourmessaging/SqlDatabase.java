@@ -75,8 +75,8 @@ public class SqlDatabase {
                     UNAME + " VARCHAR(30), " +
                     SENDER + " VARCHAR(5), " +
                     MESSAGE + " VARCHAR(200), " +
-                    UNREAD + " NUMBER, " +
-                    MESSAGEID + " NUMBER AUTOINCREMENT, " +
+                    UNREAD + " INTEGER DEFAULT 1, " +
+                    MESSAGEID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     TIME + " NUMBER);");
             db.execSQL("CREATE TABLE IF NOT EXISTS " + USERS_TABLE + " (" +
                     //Column name     Type of variable
@@ -116,7 +116,6 @@ public class SqlDatabase {
         cv.put(SENDER,map.get("sender"));
         cv.put(MESSAGE,map.get("message"));
         cv.put(TIME,map.get("time"));
-        cv.put(UNREAD,map.get("unread"));
 
         //do somthing
         mDatabase.insert(TABLE, null, cv);
